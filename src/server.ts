@@ -4,7 +4,10 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
+import router from './router/router';
+
+
 
 
 const client = express();
@@ -25,7 +28,34 @@ server.listen(8080,() =>{
 })
 
 //Connecting database
-const MONGO_URL =  'mongodb+srv://zesanrahim:1wxw8jRhfAfM9Xma@cluster0.rzl08.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+const MONGO_URL = 'mongodb+srv://zesanrahim:Zesan94559455@cluster0.rzl08.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+
 mongoose.Promise = Promise;
-mongoose.connect(MONGO_URL);
-mongoose.connection.on('error',(error: Error) => console.log("Error"));
+
+const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(MONGO_URL); // Connect to MongoDB
+    console.log('Successfully connected to MongoDB'); // Log success message
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error); // Log error if connection fails
+    process.exit(1); // Exit process on failure
+  }
+};
+
+// Listen for events on the mongoose connection
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connection established successfully');
+});
+
+mongoose.connection.on('error', (error: Error) => {
+  console.error('Error connecting to database:', error);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB connection disconnected');
+});
+
+// Call the connection function
+connectToDatabase();
+
+client.use('/', router);
