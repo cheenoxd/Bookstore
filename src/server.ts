@@ -6,7 +6,8 @@ import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './router/router';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 
 
@@ -28,7 +29,8 @@ server.listen(8080,() =>{
 })
 
 //Connecting database
-const MONGO_URL = 'mongodb+srv://zesanrahim:Zesan94559455@cluster0.rzl08.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const MONGO_URL = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.DATABASEPASSWORD}@cluster0.rzl08.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
 
 mongoose.Promise = Promise;
 
