@@ -16,7 +16,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const expectedHash = authentication(,password);
+    if (!user || !user.authentication || !user.authentication.salt) {
+      res.sendStatus(400); // Bad Request: User or authentication details missing
+      return;
+    }
+    
+    const expectedHash = authentication(user.authentication.salt, password);
+
 
   } catch (error) {
     console.error('Error in login:', error);
