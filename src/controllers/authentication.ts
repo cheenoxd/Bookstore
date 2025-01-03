@@ -7,7 +7,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.sendStatus(400); // Bad Request
+      res.status(400).json({ error: 'Email and password are required.' });
       return;
     }
     const user = await getUserByEmail(email);

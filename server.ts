@@ -5,9 +5,13 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import router from './router/router';
+import router from './src/router/router';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import { verifyJWT } from './src/middleware/verifyJWT';
+
+
+
 
 
 
@@ -20,6 +24,7 @@ client.use(cors({
 client.use(compression());
 client.use(cookieParser());
 client.use(bodyParser.json());
+client.use('/api', verifyJWT, router);
 
 //create the server
 const server = http.createServer(client);
@@ -29,7 +34,7 @@ server.listen(8080,() =>{
 })
 
 //Connecting database
-const MONGO_URL = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.DATABASEPASSWORD}@cluster0.rzl08.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const MONGO_URL = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.DATABASEPASSWORD}@cluster0.29rxn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 
 mongoose.Promise = Promise;
@@ -61,3 +66,5 @@ mongoose.connection.on('disconnected', () => {
 connectToDatabase();
 
 client.use('/', router);
+
+
